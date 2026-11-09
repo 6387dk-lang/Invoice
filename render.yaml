@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: trackify-invoice-generator
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATA_DIR
+        value: /var/data
+      - key: COOKIE_SECURE
+        value: "1"
+    disk:
+      name: invoice-data
+      mountPath: /var/data
+      sizeGB: 1
