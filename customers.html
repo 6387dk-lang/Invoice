@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}<h2>Customers</h2><div class="card p-4 mb-4"><form method="post" class="row g-2"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+<div class="col-md-3"><input class="form-control" name="name" placeholder="Name" required></div><div class="col-md-2"><input class="form-control" name="phone" placeholder="Phone"></div>
+<div class="col-md-3"><input class="form-control" name="email" placeholder="Email"></div><div class="col-md-3"><input class="form-control" name="address" placeholder="Address"></div>
+<div class="col-md-1"><button class="btn btn-primary">Add</button></div></form></div>
+<table class="table bg-white"><tr><th>Name</th><th>Phone</th><th>Email</th><th>Address</th><th></th></tr>{% for r in rows %}<tr><td>{{r.name}}</td><td>{{r.phone}}</td><td>{{r.email}}</td><td>{{r.address}}</td><td><form method="post" action="{{url_for('customer_delete',id=r.id)}}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn btn-sm btn-danger">Delete</button></form></td></tr>{% endfor %}</table>{% endblock %}

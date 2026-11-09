@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}<h2>Company Settings</h2><div class="card p-4"><form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+{% for k,label in [('company_name','Company Name'),('company_address','Address'),('company_phone','Phone'),('company_email','Email'),('company_gstin','GSTIN')] %}
+<label class="mt-2">{{label}}</label><input class="form-control" name="{{k}}" value="{{s[k]}}">{% endfor %}
+<button class="btn btn-primary mt-4">Save Settings</button></form></div>{% endblock %}

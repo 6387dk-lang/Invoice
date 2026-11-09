@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block content %}<h2>New Invoice</h2><form method="post" id="invoiceForm"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+<div class="card p-4 mb-3"><div class="row g-3"><div class="col-md-5"><label>Customer</label><select class="form-select" name="customer_id" required>{% for c in customers %}<option value="{{c.id}}">{{c.name}} - {{c.phone}}</option>{% endfor %}</select></div>
+<div class="col-md-2"><label>Invoice No</label><input class="form-control" value="{{next_no}}" readonly></div><div class="col-md-2"><label>Date</label><input class="form-control" name="invoice_date" type="date" value="{{request.form.invoice_date or ''}}" required></div>
+<div class="col-md-3"><label>Due Date</label><input class="form-control" name="due_date" type="date" value="{{request.form.due_date or ''}}" required></div></div></div>
+<div class="card p-4"><h5>Items</h5><div id="items"></div><button type="button" class="btn btn-outline-primary mt-2" onclick="addItem()">+ Add Item</button></div>
+<div class="card p-4 mt-3"><div class="row g-3"><div class="col-md-3"><label>Discount</label><input class="form-control" name="discount" type="number" step="0.01" value="0"></div>
+<div class="col-md-3"><label>GST %</label><input class="form-control" name="gst_percent" type="number" step="0.01" value="18"></div>
+<div class="col-md-3"><label>Tax Type</label><select class="form-select" name="tax_type"><option>CGST + SGST</option><option>IGST</option><option>No Tax</option></select></div>
+<div class="col-md-3"><label>Payment</label><select class="form-select" name="payment_status"><option>Unpaid</option><option>Paid</option><option>Partially Paid</option><option>Overdue</option></select></div>
+<div class="col-12"><label>Notes</label><input class="form-control" name="notes" value="Thank you for your business."></div></div></div>
+<button class="btn btn-success btn-lg mt-3">Save & Generate PDF</button></form>
+<script>
+const products={{ products|tojson }};
+function addItem(){
+ let box=document.createElement('div');box.className='row g-2 mb-2 item';
+ let opts=products.map(p=>`<option data-hsn="${p.hsn_sac||''}" data-rate="${p.rate}" value="${p.name}">${p.name}</option>`).join('');
+ box.innerHTML=`<div class="col-md-4"><select class="form-select product" name="item_name" onchange="fill(this)"><option value="">Select product/service</option>${opts}</select></div>
+ <div class="col-md-2"><input class="form-control hsn" name="hsn_sac" placeholder="HSN/SAC"></div>
+ <div class="col-md-2"><input class="form-control" name="quantity" type="number" min="1" value="1"></div>
+ <div class="col-md-2"><input class="form-control rate" name="rate" type="number" step="0.01" value="0"></div>
+ <div class="col-md-2"><button type="button" class="btn btn-danger w-100" onclick="this.parentElement.parentElement.remove()">Remove</button></div>`;
+ document.getElementById('items').appendChild(box);
+}
+function fill(s){let o=s.options[s.selectedIndex];let row=s.closest('.item');row.querySelector('.hsn').value=o.dataset.hsn||'';row.querySelector('.rate').value=o.dataset.rate||0;}
+addItem();
+</script>{% endblock %}

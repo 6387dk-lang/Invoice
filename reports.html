@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block content %}<div class="d-flex justify-content-between"><h2>Monthly Reports</h2><a class="btn btn-success" href="{{url_for('reports_csv')}}">Export CSV</a></div>
+<table class="table bg-white mt-3"><tr><th>Month</th><th>Invoices</th><th>Sales</th><th>Paid</th><th>Pending</th></tr>
+{% for m,d in data %}<tr><td>{{m}}</td><td>{{d.count}}</td><td>Rs. {{'%.2f'|format(d.sales)}}</td><td>Rs. {{'%.2f'|format(d.paid)}}</td><td>Rs. {{'%.2f'|format(d.pending)}}</td></tr>{% endfor %}</table>{% endblock %}
